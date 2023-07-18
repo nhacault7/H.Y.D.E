@@ -1,0 +1,26 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+hyde-web-interface/node_modules
+hyde-web-interface/.pnp
+hyde-web-interface/.pnp.js
+
+# testing
+hyde-web-interface/coverage
+
+# production
+hyde-web-interface/build
+
+# misc
+hyde-web-interface/.DS_Store
+hyde-web-interface/.env.local
+hyde-web-interface/.env.development.local
+hyde-web-interface/.env.test.local
+hyde-web-interface/.env.production.local
+
+hyde-web-interface/npm-debug.log*
+hyde-web-interface/yarn-debug.log*
+hyde-web-interface/yarn-error.log*
+
+brain/pretrained_models
+brain/.rasa
