@@ -1,0 +1,413 @@
+version: "3.1"
+
+intents:
+  - setup 
+  - setup_next
+  - setup_user
+  - setup_persona
+  - setup_generate
+  - favorite_colour
+  - nlu_fallback
+  - goodbye
+  - bot_challenge
+  # ---------------------------------- LLM Capabilities ----------------------------------
+  - inquire_capabilities
+  - inquire_qa_information
+  - request_qa
+  - inquire_summarization_information
+  - request_summarization
+  - inquire_generation_information
+  - request_generation
+  - inquire_paraphrasing_information
+  - request_paraphrasing
+  # ---------------------------------- Geo Capabilities -----------------------------------
+  - inquire_geo_information
+  - inquire_weather_information
+  - inquire_astronomical_information
+  - inquire_calendar_information
+  - inquire_geographical_information
+  - request_local_weather
+  - request_local_forecast
+  - request_local_sunrise
+  - request_local_sunset
+  - request_local_timezone
+  - request_local_date
+  - request_local_time
+  - request_local_coordinates
+
+forms:
+  setup_user_form:
+    required_slots:
+      - user_name
+      - favorite_colour
+  setup_persona_form:
+    required_slots:
+      - persona_prompt
+      - feedback_response
+      - communication_response
+      - empathy_response
+  qa_form:
+    required_slots:
+      - qa_context
+      - qa_question
+  summarization_form:
+    required_slots:
+      - summarization_text
+  generation_form:
+    required_slots:
+      - generation_goal
+      - generation_prompt
+  paraphrasing_form:
+    required_slots:
+      - paraphrasing_text
+
+slots:
+  # ---------------------------------- Setup Slots-----------------------------------
+  user_name:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: setup_user_form
+          requested_slot: user_name
+      - type: custom
+        action: action_configure_setup
+  favorite_colour:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: setup_user_form
+          requested_slot: favorite_colour
+      - type: custom
+        action: action_configure_setup
+  persona_prompt:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: setup_persona_form
+          requested_slot: persona_prompt
+      - type: custom
+        action: action_configure_setup
+  feedback_response:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: setup_persona_form
+          requested_slot: feedback_response
+      - type: custom
+        action: action_configure_setup
+  communication_response:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: setup_persona_form
+          requested_slot: communication_response
+      - type: custom
+        action: action_configure_setup
+  empathy_response:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: setup_persona_form
+          requested_slot: empathy_response
+      - type: custom
+        action: action_configure_setup
+  setup_response:
+    type: text
+    mappings:
+      - type: custom
+        action: action_generate_setup
+  # ---------------------------------- LLM Slots-----------------------------------
+  qa_context:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: qa_form
+          requested_slot: qa_context
+  qa_question:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: qa_form
+          requested_slot: qa_question
+  summarization_text:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: summarization_form
+          requested_slot: summarization_text
+  generation_goal:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: generation_form
+          requested_slot: generation_goal
+  generation_prompt:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: generation_form
+          requested_slot: generation_prompt
+  paraphrasing_text:
+    type: text
+    mappings:
+      - type: from_text
+        conditions:
+        - active_loop: paraphrasing_form
+          requested_slot: paraphrasing_text
+  # ---------------------------------- Geo Slots -----------------------------------
+  local_temperature:
+    type: float
+    mappings:
+    - type: custom
+      action: action_get_local_weather
+  local_humidity:               
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_weather
+  local_weather_description:    
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_weather
+  local_forecast:               
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_forecast
+  local_sunrise:
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_sunrise
+  local_sunset:
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_sunset
+  local_timezone:
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_timezone
+  local_date:
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_date
+  local_time:
+    type: text
+    mappings:
+    - type: custom
+      action: action_get_local_time
+  local_latitude:
+    type: float
+    mappings:
+    - type: custom
+      action: action_get_local_coordinates
+  local_longitude:
+    type: float
+    mappings:
+    - type: custom
+      action: action_get_local_coordinates
+
+responses:
+  # ---------------------------------- Setup Responses -----------------------------------
+  utter_welcome:
+  - text: "Welcome!"
+    buttons:
+    - title: "Next"
+      payload: "setup next"
+
+  utter_welcome_personalized:
+  - text: "Welcome, {user_name}!"
+    buttons:
+    - title: "Finish"
+      payload: "setup finish"
+
+  utter_iamhyde:
+  - text: "I am H.Y.D.E (How You Doin Everyone), your Virtual Personal Assistant."
+    buttons:
+    - title: "Next"
+      payload: "setup next"
+
+  utter_main_objective:
+  - text: "My job is to help with your day to day tasks."
+    buttons:
+    - title: "Next"
+      payload: "setup user"
+
+  utter_ask_user_name:
+  - text: "Let's start with you telling me your name."
+
+  utter_ask_favorite_colour:
+  - text: "Okay {user_name}, how about your favorite color?"
+
+  utter_submit:
+  - text: "There, that's better."
+    buttons:
+    - title: "Next"
+      payload: "setup next"
+
+  utter_persona_feature:
+  - text: "To make our partnership as enjoyable as possible, you can define my personality."
+    buttons:
+    - title: "Next"
+      payload: "setup next"
+
+  utter_persona_explain:
+  - text: "I will now ask you a series of questions as if I were you. Answer as if you were me and I will assume my personality from your answers."
+    buttons:
+    - title: "Next"
+      payload: "setup persona"
+
+  utter_submit_setup:
+  - text: "Setup Complete. Generating Persona..."
+    buttons:
+    - title: "Next"
+      payload: "setup generate"
+
+  utter_setup_response:
+  - text: "{setup_response}"
+    buttons:
+    - title: "Finish"
+      payload: "setup finish"
+
+  utter_ask_persona_prompt:
+  - text: "Hi! My name is {user_name}. Who are you?"
+
+  utter_ask_feedback_response:
+  - text: "Nice to meet you! How do you handle criticism or feedback?"
+
+  utter_ask_communication_response:
+  - text: "Okay! Now tell me this. How would you describe your communication style?"
+
+  utter_ask_empathy_response:
+  - text: "Interesting, and how would you describe your level of empathy and understanding?"
+
+  utter_favorite_colour:
+  - text: "{favorite_colour}"
+
+  utter_goodbye:
+  - text: "Goodbye!"
+
+  # ---------------------------------- LLM Responses -----------------------------------
+  utter_capabilities:
+  - text: "I can perform a range of tasks. You can ask me to do any of the following:\n
+            \n- Answer questions on a given text
+            \n- Summarize a given text
+            \n- Generate text from a given prompt
+            \n- Paraphrase a given text
+            \n- Query location based information (ask for more information)"
+
+  utter_explain_qa_inquiry:
+  - text: "I can answer any question you ask as long as you give me some context to work with."
+
+  utter_ask_qa_context:
+  - text: "Please enter the context for your question."
+
+  utter_ask_qa_question:
+  - text: "I've saved the context. What would you like to know?"
+
+  utter_explain_summarization_inquiry:
+  - text: "I can summarize any inputted text by removing all supplementary information."
+
+  utter_ask_summarization_text:
+  - text: "What would you like me to summarize for you?"
+
+  utter_explain_generation_inquiry:
+  - text: "I can generate text based on an input prompt."
+
+  utter_ask_generation_goal:
+  - text: "Please describe the intended goal or purpose of the generated text."
+
+  utter_ask_generation_prompt:
+  - text: "Enter the first few words of the text you want to generate."
+
+  utter_explain_paraphrasing_inquiry:
+  - text: "I can paraphrase any given text, giving it a new feel."
+
+  utter_ask_paraphrasing_text:
+  - text: "What would you like me to paraphrase for you?"
+
+  # ---------------------------------- Geo Responses -----------------------------------
+  utter_ask_geo_inquiry:
+  - text: "The types of information I can query from your location are:\n
+            \n- Geographical
+            \n- Weather
+            \n- Calendar
+            \n- Astronomical"
+
+  utter_ask_weather_inquiry:
+  - text: "The types of information I can query about the weather are:\n
+            \n- Weather
+            \n- Forecast"
+
+  utter_ask_astronomical_inquiry:
+  - text: "The types of astronomical information I can query are:\n
+            \n- Sunrise
+            \n- Sunset"
+
+  utter_ask_calendar_inquiry:
+  - text: "The types of calendar information I can query are:\n
+            \n- Timezone"
+
+  utter_ask_geographical_inquiry:
+  - text: "The types of geographical information I can query are:\n
+            \n- Coordinates"
+  
+  utter_local_weather:
+  - text: "The current temperature in your area is {local_temperature} with {local_humidity}% humidity. The sky shows {local_weather_description}"
+
+  utter_local_forecast:
+  - text: "{local_forecast}"
+
+  utter_local_sunrise:
+  - text: "The sunrise is at {local_sunrise}"
+
+  utter_local_sunset:
+  - text: "The sunset is at {local_sunset}"
+  
+  utter_local_timezone:
+  - text: "Your current timezone is {local_timezone}"
+
+  utter_local_date:
+  - text: "The current date is {local_date}"
+
+  utter_local_time:
+  - text: "The current time is {local_time}"
+
+  utter_local_coordinates:
+  - text: "Your current coordinates are {local_latitude} (lat), and {local_longitude} (lon)"
+  
+actions:
+  - action_generate_setup
+  - action_configure_setup
+  - action_chitchat_fallback
+  - action_answer_question
+  - action_summarize_text
+  - action_generate_text
+  - action_paraphrase_text
+  - action_get_local_weather
+  - action_get_local_forecast
+  - action_get_local_sunrise
+  - action_get_local_sunset
+  - action_get_local_timezone
+  - action_get_local_date
+  - action_get_local_time
+  - action_get_local_coordinates
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

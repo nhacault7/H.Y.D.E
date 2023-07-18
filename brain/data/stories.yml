@@ -1,0 +1,303 @@
+version: "3.1"
+
+stories:
+# ----------------------------- SETUP -----------------------------
+- story: enter setup
+  steps:
+  - intent: setup
+  - action: action_configure_setup
+  - action: utter_welcome
+  - intent: setup_next
+  - action: utter_iamhyde
+  - intent: setup_next
+  - action: utter_main_objective
+  - intent: setup_user
+  - action: setup_user_form
+  - active_loop: setup_user_form
+  - slot_was_set:
+    - requested_slot: user_name
+  - slot_was_set:
+    - user_name: Nicholas
+  - slot_was_set:
+    - requested_slot: favorite_colour
+  - slot_was_set:
+    - favorite_colour: Purple
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_submit
+  - intent: setup_next
+  - action: utter_persona_feature
+  - intent: setup_next
+  - action: utter_persona_explain
+  - intent: setup_persona
+  - action: setup_persona_form
+  - active_loop: setup_persona_form
+  - slot_was_set:
+    - requested_slot: persona_prompt
+  - slot_was_set:
+    - persona_prompt: A funny robot
+  - slot_was_set:
+    - requested_slot: feedback_response
+  - slot_was_set:
+    - feedback_response: I take feedback well
+  - slot_was_set:
+    - requested_slot: communication_response
+  - slot_was_set:
+    - communication_response: I like to give detailed answers
+  - slot_was_set:
+    - requested_slot: empathy_response
+  - slot_was_set:
+    - empathy_response: A funny robot
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_submit_setup
+  - intent: setup_generate
+  - action: action_generate_setup
+  - slot_was_set:
+    - setup_response: A funny robot
+  - action: utter_setup_response
+
+- story: dont enter setup
+  steps:
+  - intent: setup
+  - action: action_configure_setup
+  - slot_was_set:
+    - user_name: Nicholas
+    - favorite_colour: Purple
+    - persona_prompt: A funny robot
+    - feedback_response: I take feedback well
+    - communication_response: I like to give detailed answers
+    - empathy_response: A funny robot
+    - setup_response: A funny robot
+  - action: utter_welcome_personalized
+
+- story: get color
+  steps:
+  - intent: favorite_colour
+  - action: utter_favorite_colour
+
+# --------------------------------------------------------- INQUIRE CAPABILITIES (GEO) ---------------------------------------------------------
+# ----------------------------- INQUIRE WEATHER -----------------------------
+# --------------------------------- WEATHER ---------------------------------
+- story: inquire capabilities + inquire geo information + inquire weather + request local weather
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_weather_information
+  - action: utter_ask_weather_inquiry
+  - intent: request_local_weather
+  - action: action_get_local_weather
+  - slot_was_set:
+    - local_temperature: 23.0
+    - local_humidity: 40%
+    - local_weather_description: scattered clouds
+  - action: utter_local_weather
+
+# ----------------------------- INQUIRE WEATHER -----------------------------
+# --------------------------------- FORECAST --------------------------------
+- story: inquire capabilities + inquire geo information + inquire weather + request current local forecast
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_weather_information
+  - action: utter_ask_weather_inquiry
+  - intent: request_local_forecast
+  - action: action_get_local_forecast
+  - slot_was_set:
+    - local_forecast: "Date: 2023-06-21 Weather: Rain Temperature: 24°C Probability of Precipitation: 96.0% Humidity: 85%"
+  - action: utter_local_forecast
+
+# ----------------------------- INQUIRE ASTRONOMICAL -----------------------------
+# ------------------------------------ SUNRISE -----------------------------------
+- story: inquire capabilities + inquire geo information + inquire astronomical + request local sunrise
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_astronomical_information
+  - action: utter_ask_astronomical_inquiry
+  - intent: request_local_sunrise
+  - action: action_get_local_sunrise
+  - slot_was_set:
+    - local_sunrise: "2023-06-21 05:17:39-05:00"
+  - action: utter_local_sunrise
+
+# ----------------------------- INQUIRE ASTRONOMICAL -----------------------------
+# ------------------------------------ SUNSET ------------------------------------
+- story: inquire capabilities + inquire geo information + inquire astronomical + request local sunset
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_astronomical_information
+  - action: utter_ask_astronomical_inquiry
+  - intent: request_local_sunset
+  - action: action_get_local_sunset
+  - slot_was_set:
+    - local_sunset: "2023-06-21 05:17:39-05:00"
+  - action: utter_local_sunset
+
+# ----------------------------- INQUIRE CALENDAR -----------------------------
+# --------------------------------- TIMEZONE ---------------------------------
+- story: inquire capabilities + inquire geo information + inquire calendar + request local timezone
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_calendar_information
+  - action: utter_ask_calendar_inquiry
+  - intent: request_local_timezone
+  - action: action_get_local_timezone
+  - slot_was_set:
+    - local_timezone: -7 GST
+  - action: utter_local_timezone
+
+# ----------------------------- INQUIRE CALENDAR -----------------------------
+# ----------------------------------- DATE -----------------------------------
+- story: inquire capabilities + inquire geo information + inquire calendar + request local date
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_calendar_information
+  - action: utter_ask_calendar_inquiry
+  - intent: request_local_date
+  - action: action_get_local_date
+  - slot_was_set:
+    - local_date: Sept 10
+  - action: utter_local_date
+
+# ----------------------------- INQUIRE CALENDAR -----------------------------
+# ----------------------------------- TIME -----------------------------------
+- story: inquire capabilities + inquire geo information + inquire calendar + request local time
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_calendar_information
+  - action: utter_ask_calendar_inquiry
+  - intent: request_local_time
+  - action: action_get_local_time
+  - slot_was_set:
+    - local_time: 09:30 AM
+  - action: utter_local_time
+
+# ----------------------------- INQUIRE GEOGRAPHICAL -----------------------------
+# ---------------------------------- COORDINATES ---------------------------------
+- story: inquire capabilities + inquire geo information + inquire geographical + request current coordinates 
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_geo_information
+  - action: utter_ask_geo_inquiry
+  - intent: inquire_geographical_information
+  - action: utter_ask_geographical_inquiry
+  - intent: request_local_coordinates
+  - action: action_get_local_coordinates
+  - slot_was_set:
+    - local_latitude: 49.0
+    - local_longitude: -97.0
+  - action: utter_local_coordinates
+
+# --------------------------------------------------------- INQUIRE CAPABILITIES (QA) ---------------------------------------------------------
+# --------------- INQUIRE QUESTION ANSWERING --------------
+# --------------------- ANSWER QUESTION -------------------
+- story: inquire capabilities + inquire question answering information + request qa from text without specifying
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_qa_information
+  - action: utter_explain_qa_inquiry
+  - intent: request_qa
+  - action: qa_form
+  - active_loop: qa_form
+  - slot_was_set:
+    - requested_slot: qa_context
+  - slot_was_set:
+    - qa_context: I walk my dog at night
+  - slot_was_set:
+    - requested_slot: qa_question
+  - slot_was_set:
+    - qa_question: When do I walk my dog
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_answer_question 
+
+# --------------------------------------------------------- INQUIRE CAPABILITIES (SUMMARIZATION) ---------------------------------------------------------
+# ----------------- INQUIRE SUMMARIZATION -----------------
+# ----------------------- SUMMARIZE -----------------------
+- story: inquire capabilities + inquire summarization information + request summarization from text without specifying
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_summarization_information
+  - action: utter_explain_summarization_inquiry
+  - intent: request_summarization
+  - action: summarization_form
+  - active_loop: summarization_form
+  - slot_was_set:
+    - requested_slot: summarization_text
+  - slot_was_set:
+    - summarization_text: I walk my dog at night. In the dark night, when it is dark. That is the time that I walk my dog
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_summarize_text
+
+# --------------------------------------------------------- INQUIRE CAPABILITIES (GENERATION) ---------------------------------------------------------
+# ------------------- INQUIRE GENERATION ------------------
+# ------------------------ GENERATE -----------------------
+- story: inquire capabilities + inquire generation information + request generation from prompt without specifying
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_generation_information
+  - action: utter_explain_generation_inquiry
+  - intent: request_generation
+  - action: generation_form
+  - active_loop: generation_form
+  - slot_was_set:
+    - requested_slot: generation_goal
+  - slot_was_set:
+    - generation_goal: A story about how bears are the best animal
+  - slot_was_set:
+    - requested_slot: generation_prompt
+  - slot_was_set:
+    - generation_prompt: In the forest
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_generate_text
+
+# --------------------------------------------------------- INQUIRE CAPABILITIES (PARAPHRASING) ---------------------------------------------------------
+# ------------------ INQUIRE PARAPHRASING -----------------
+# ----------------------- PARAPHRASE ----------------------
+- story: inquire capabilities + inquire paraphrasing information + request paraphrasing from text without specifying
+  steps:
+  - intent: inquire_capabilities
+  - action: utter_capabilities
+  - intent: inquire_paraphrasing_information
+  - action: utter_explain_paraphrasing_inquiry
+  - intent: request_paraphrasing
+  - action: paraphrasing_form
+  - active_loop: paraphrasing_form
+  - slot_was_set:
+    - requested_slot: paraphrasing_text
+  - slot_was_set:
+    - paraphrasing_text: I like to go outside when the weather is nice
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: action_paraphrase_text

@@ -1,0 +1,168 @@
+.setup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100vh;
+}
+
+.step {
+  font-size: 30px;
+  margin: 0 20vw;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons button {
+  margin: 5px;
+}
+
+.bot.loading {
+  font-size: 30px;
+}
+
+.next-button.hidden {
+  display: none;
+}
+
+.next-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  right: 2vw;
+  bottom: -1vh;
+  padding: 2.5px;
+}
+
+.circle-button {
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+.circle-container {
+  width: 25px;
+  height: 50px;
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+}
+
+.circle-container--right {
+  right: 0px;
+}
+
+.circle-container--left {
+  left: 0px;
+}
+
+.circle-piece {
+  width: 40px;
+  height: 40px;
+  border: 5px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  transform: rotate(-135deg);
+}
+
+.circle-right {
+  border-top: 5px solid white;
+  border-right: 5px solid white;
+  right: 1px;
+  animation: circleRight 1.2s linear forwards;
+  animation-delay: 0.5s;
+}
+
+.circle-left {
+  border-bottom: 5px solid white;
+  border-left: 5px solid white;
+  left: 1px;
+  animation: circleLeft 1.2s linear forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes circleRight {
+  0% {
+    transform: rotate(-135deg);
+  }
+  50%,
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes circleLeft {
+  0%,
+  50% {
+    transform: rotate(-135deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+.arrow {
+  width: 2rem;
+  height: 2rem;
+  fill: white;
+  opacity: 0;
+  animation: fadeInArrow 0.5s ease-in-out forwards;
+  animation-delay: 1.6s;
+  position: relative;
+  left: -50%;
+}
+
+@keyframes fadeInArrow {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.input-container.hidden {
+  display: none;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 0;
+  animation: setupInputGrow 1s ease-in-out forwards;
+}
+
+.input-field {
+  width: 100%;
+  height: 40px;
+}
+
+@keyframes setupInputGrow {
+  0% {
+    width: 1%;
+  }
+  100% {
+    width: 65%;
+  }
+}

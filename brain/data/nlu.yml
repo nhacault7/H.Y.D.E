@@ -1,0 +1,232 @@
+version: "3.1"
+
+nlu:
+# ---------------------------------- Setup Intents -----------------------------------
+- intent: setup
+  examples: |
+    - setup enter
+    - setup enter now
+
+- intent: setup_next
+  examples: |
+    - setup next
+    - setup next now
+
+- intent: setup_user
+  examples: |
+    - setup user
+    - setup user now
+
+- intent: setup_persona
+  examples: |
+    - setup persona
+    - setup persona now
+
+- intent: setup_generate
+  examples: |
+    - setup generate
+    - setup generate now
+
+- intent: favorite_colour
+  examples: |
+    - What is my favorite color?
+    - What's my fav color?
+    
+# ---------------------------------- LLM Intents -----------------------------------
+- intent: inquire_capabilities
+  examples: |
+    - what can you do?
+    - what are your abilities?
+    - can you do anything?
+    - tell me your abilities
+    - tell me what you can do
+
+- intent: inquire_qa_information
+  examples: |
+    - what kind of question answering information can you provide?
+    - how do you perform question answering tasks?
+    - if I give you some text can you answer questions?
+    - what types of questions can you answer?
+    - can you provide information on your question answering capabilities?
+    - how well can you answer questions based on given information?
+    - if I provide you with a passage, can you accurately answer questions about it?
+    - can you help me with a question related to a specific text?
+
+- intent: request_qa
+  examples: |
+    - i need you to answer a question from a given text for me
+    - i have some text that i want to ask you a question about
+    - i need you to analyze this text then answer a question for me
+    - i need you to analyze a text and provide me with an answer to a question
+    - I'm seeking your expertise to answer a question based on the given text
+    - I have a question that pertains to a specific text
+    - help me understand a particular passage by answering a question about it
+
+- intent: inquire_summarization_information
+  examples: |
+    - can you provide a summarization of text
+    - can you summarize text?
+    - what kind of summarization can you do?
+    - how does your text summarization feature work?
+    - can you give me an overview of your summarization capabilities?
+    - what techniques do you use for text summarization?
+
+- intent: request_summarization
+  examples: |
+    - i need you to summarize something
+    - i need some text summarized
+    - summarize this text for me
+    - I need a brief summary of this article
+    - I'm looking for a brief summary 
+
+- intent: inquire_generation_information
+  examples: |
+    - can you provide text generation
+    - can you generate text from a prompt
+    - do you do text generation
+    - I'm interested in learning about your text generation
+    - can you explain how your text generation process works?
+    - can I use this model to generate text for creative writing or storytelling purposes?
+    - what methods does your system use for generating text?
+
+- intent: request_generation
+  examples: |
+    - generate text for me
+    - i need to generate some text
+    - i need to generate text from a prompt
+    - i want to generate text
+    - let's generate some text
+    - enter text generation mode
+    - generate a text based on my input
+
+- intent: inquire_paraphrasing_information
+  examples: |
+    - can you provide text paraphrasing
+    - how can you paraphrase text
+    - can you do text paraphrasing
+    - what is the process of paraphrasing text?
+    - do you offer a service for paraphrasing?
+
+- intent: request_paraphrasing
+  examples: |
+    - paraphrase text for me
+    - i need some text paraphrased
+    - i need to paraphrase some text
+    - I'm looking for a way to say something differently
+    - I would like to have some text paraphrased
+    - please paraphrase a sentence
+
+# ---------------------------------- Geo Intents -----------------------------------
+- intent: inquire_geo_information
+  examples: |
+    - I would like to know information about a location
+    - can you tell me information about a location?
+    - if I give you a location, can you give me information about it?
+    - please tell me information about a location
+    - what kind of location based information can you give me
+    - what kind of geo information can you provide
+
+- intent: inquire_weather_information
+  examples: |
+    - what kind of weather information can you provide?
+    - can you give me weather based information?
+    - i would like to know about the weather
+    - can you provide weather information?
+
+- intent: inquire_astronomical_information
+  examples: |
+    - what kind of astronomical information can you provide?
+    - can you give me astronomical based information?
+    - i would like to know about astronomical information
+
+- intent: inquire_calendar_information
+  examples: |
+    - what kind of calendar information can you provide?
+    - can you give me calendar based information?
+    - i would like to know about calendar information
+
+- intent: inquire_geographical_information
+  examples: |
+    - what kind of geographical information can you provide?
+    - can you give me geographical based information?
+    - i would like to know about geographical information
+
+- intent: request_local_weather
+  examples: |
+    - I would like to know the weather outside
+    - can you tell me what the weather is like outside
+    - please tell me what the weather is
+    - what is the weather? 
+
+- intent: request_local_forecast
+  examples: |
+    - I would like to know the forecast
+    - can you tell me what the forecast is like
+    - please tell me what the forecast is
+    - what is the forecast? 
+
+- intent: request_local_sunrise
+  examples: |
+    - I would like to know when the sunrise is
+    - can you tell me when the sunrise happens
+    - please tell me when the sunrise is
+    - when is the sunrise? 
+
+- intent: request_local_sunset
+  examples: |
+    - I would like to know when the sunset is
+    - can you tell me when the sunset happens
+    - please tell me when the sunset is
+    - when is the sunset? 
+
+- intent: request_local_timezone
+  examples: |
+    - I would like to know my timezone
+    - can you tell me what my timezone is
+    - please tell me my timezone
+    - what is my timezone?
+
+- intent: request_local_date
+  examples: |
+    - I would like to know the date
+    - can you tell me what the date is
+    - please tell me the date
+    - what is the date?
+    - what day is it?
+
+- intent: request_local_time
+  examples: |
+    - I would like to know the time
+    - can you tell me what the time is
+    - please tell me the time
+    - what is the time?
+    - what time is it?
+
+- intent: request_local_coordinates
+  examples: |
+    - I would like to know my coordinates
+    - can you tell me what my coordinates are
+    - please tell me my coordinates
+    - what are my coordinates?
+
+# ---------------------------------- Rulebound Intents -----------------------------------
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+    

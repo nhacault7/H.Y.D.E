@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rasa Core Visualisation</title>
+    <script src="https://dagrejs.github.io/project/dagre-d3/latest/dagre-d3.min.js"></script>
+    <script src="https://dagrejs.github.io/project/dagre/latest/dagre.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://dagrejs.github.io/project/graphlib-dot/v0.6.3/graphlib-dot.js"></script>
+</head>
+<body>
+<div id="errormsg" style="color: #b00"></div>
+<svg>
+    <style id="graph-style">
+        .node.invisible > rect {
+            display: none;
+        }
+
+        .node.start > rect {
+            fill: #7f7;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node.end > rect {
+            fill: #f77;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node:not(.active) > rect, .node:not(.active) > .label {
+            opacity: 0.4;
+        }
+
+        .edgePath:not(.active) path {
+            opacity: 0.4;
+        }
+
+        .node.ellipsis > rect {
+            fill: #CCC;
+        }
+
+        .node.intent > rect {
+            fill: #7ff;
+        }
+
+        .node.dashed > rect {
+            stroke-dasharray: 5;
+        }
+
+        text {
+            font-weight: 300;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+            font-size: 14px;
+            color: #1f1d1d;
+        }
+
+        .node rect {
+            stroke: #444;
+            fill: #fff;
+            stroke-width: 1.5px;
+        }
+
+        .edgePath path {
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        svg {
+            position: fixed;
+            top: 10px;
+            left: 0;
+            height: 100%;
+            width: 100%
+        }
+    </style>
+    <g></g>
+</svg>
+<script>
+
+  function serveGraph() {
+    let oldInputGraphValue;
+
+    const url = 'visualization.dot';
+    const refreshInterval = 500;
+
+    // trigger a refresh by fetching an updated graph
+    setInterval(function () {
+      fetch(url).then(r => r.text()).then(dot => {
+        document.getElementById('errormsg').innerHTML = '';
+        if (oldInputGraphValue === dot) return;
+
+        oldInputGraphValue = dot;
+        drawGraph(dot);
+      }).catch(err => {
+        document.getElementById('errormsg').innerHTML =
+          'Failed to update plot. (' + err.message + ')';
+      });
+    }, refreshInterval);
+  }
+
+  function drawGraph(graph) {
+    let g = graphlibDot.read(graph);
+    // Set margins, if not present
+    if (!g.graph().hasOwnProperty("marginx") &&
+      !g.graph().hasOwnProperty("marginy")) {
+      g.graph().marginx = 20;
+      g.graph().marginy = 20;
+    }
+    g.graph().transition = function (selection) {
+      return selection.transition().duration(300);
+    };
+    // Render the graph into svg g
+    d3.select("svg g").call(render, g);
+  }
+  // Set up zoom support
+  const svg = d3.select("svg"),
+    inner = d3.select("svg g"),
+    zoom = d3.zoom().on("zoom", function () {
+      inner.attr("transform", d3.event.transform);
+    });
+  svg.call(zoom);
+
+  // Create and configure the renderer
+  const render = dagreD3.render();
+
+  let isClient = false;
+  isClient = true;
+
+  if (isClient) {
+    // Mark all nodes and their edges as active
+    cssRules = document.getElementById('graph-style').sheet.cssRules;
+    cssRules[3].style.opacity = 1;
+    cssRules[4].style.opacity = 1;
+
+    let graph;
+    graph = `digraph  {
+0 [class="start active", fillcolor=green, fontsize=12, label=START, style=filled];
+"-1" [class=end, fillcolor=red, fontsize=12, label=END, style=filled];
+1 [class="", fontsize=12, label=utter_capabilities];
+2 [class="", fontsize=12, label=utter_ask_geo_inquiry];
+3 [class="", fontsize=12, label=utter_ask_astronomical_inquiry];
+4 [class="", fontsize=12, label=action_get_local_sunset];
+5 [class="", fontsize=12, label=utter_local_sunset];
+8 [class="", fontsize=12, label=utter_ask_calendar_inquiry];
+9 [class="", fontsize=12, label=action_get_local_timezone];
+10 [class="", fontsize=12, label=utter_local_timezone];
+14 [class="", fontsize=12, label=action_get_local_date];
+15 [class="", fontsize=12, label=utter_local_date];
+19 [class="", fontsize=12, label=action_get_local_time];
+20 [class="", fontsize=12, label=utter_local_time];
+23 [class="", fontsize=12, label=utter_ask_geographical_inquiry];
+24 [class="", fontsize=12, label=action_get_local_coordinates];
+25 [class="", fontsize=12, label=utter_local_coordinates];
+27 [class="", fontsize=12, label=utter_explain_qa_inquiry];
+28 [class="", fontsize=12, label=qa_form];
+29 [class="", fontsize=12, label=action_answer_question];
+31 [class="", fontsize=12, label=utter_explain_summarization_inquiry];
+32 [class="", fontsize=12, label=summarization_form];
+33 [class="", fontsize=12, label=action_summarize_text];
+35 [class="", fontsize=12, label=utter_explain_generation_inquiry];
+36 [class="", fontsize=12, label=generation_form];
+37 [class="", fontsize=12, label=action_generate_text];
+39 [class="", fontsize=12, label=utter_explain_paraphrasing_inquiry];
+40 [class="", fontsize=12, label=paraphrasing_form];
+41 [class="", fontsize=12, label=action_paraphrase_text];
+42 [class="", fontsize=12, label=action_configure_setup];
+43 [class="", fontsize=12, label=utter_welcome];
+44 [class="", fontsize=12, label=utter_iamhyde];
+45 [class="", fontsize=12, label=utter_main_objective];
+46 [class="", fontsize=12, label=setup_user_form];
+47 [class="", fontsize=12, label=utter_submit];
+48 [class="", fontsize=12, label=utter_persona_feature];
+49 [class="", fontsize=12, label=utter_persona_explain];
+50 [class="", fontsize=12, label=setup_persona_form];
+51 [class="", fontsize=12, label=utter_submit_setup];
+52 [class="", fontsize=12, label=action_generate_setup];
+53 [class="", fontsize=12, label=utter_setup_response];
+55 [class="", fontsize=12, label=utter_welcome_personalized];
+56 [class="", fontsize=12, label=utter_favorite_colour];
+59 [class="", fontsize=12, label=utter_ask_weather_inquiry];
+60 [class="", fontsize=12, label=action_get_local_weather];
+61 [class="", fontsize=12, label=utter_local_weather];
+65 [class="", fontsize=12, label=action_get_local_forecast];
+66 [class="", fontsize=12, label=utter_local_forecast];
+70 [class="", fontsize=12, label=action_get_local_sunrise];
+71 [class="", fontsize=12, label=utter_local_sunrise];
+72 [class="", fontsize=12, label="..."];
+73 [class="", fontsize=12, label=utter_goodbye];
+75 [class="", fontsize=12, label=utter_iamhyde];
+77 [class="", fontsize=12, label=action_chitchat_fallback];
+78 [class=intent, fillcolor=lightblue, label="tell me your abilities", shape=rect, style=filled];
+79 [class=intent, fillcolor=lightblue, label="setup enter", shape=rect, style=filled];
+80 [class=intent, fillcolor=lightblue, label="What is my favorite color?", shape=rect, style=filled];
+81 [class=intent, fillcolor=lightblue, label="what kind of location based information can you give me", shape=rect, style=filled];
+82 [class=intent, fillcolor=lightblue, label="if I provide you with a passage, can you accurately answer questions about it?", shape=rect, style=filled];
+83 [class=intent, fillcolor=lightblue, label="what kind of summarization can you do?", shape=rect, style=filled];
+84 [class=intent, fillcolor=lightblue, label="can you generate text from a prompt", shape=rect, style=filled];
+85 [class=intent, fillcolor=lightblue, label="do you offer a service for paraphrasing?", shape=rect, style=filled];
+86 [class=intent, fillcolor=lightblue, label="i would like to know about astronomical information", shape=rect, style=filled];
+87 [class=intent, fillcolor=lightblue, label="i would like to know about calendar information", shape=rect, style=filled];
+88 [class=intent, fillcolor=lightblue, label="can you give me geographical based information?", shape=rect, style=filled];
+89 [class=intent, fillcolor=lightblue, label="what kind of weather information can you provide?", shape=rect, style=filled];
+90 [class=intent, fillcolor=lightblue, label="can you tell me when the sunset happens", shape=rect, style=filled];
+91 [class=intent, fillcolor=lightblue, label="can you tell me when the sunrise happens", shape=rect, style=filled];
+92 [class=intent, fillcolor=lightblue, label="please tell me my timezone", shape=rect, style=filled];
+93 [class=intent, fillcolor=lightblue, label="please tell me the date", shape=rect, style=filled];
+94 [class=intent, fillcolor=lightblue, label="can you tell me what the time is", shape=rect, style=filled];
+95 [class=intent, fillcolor=lightblue, label="please tell me my coordinates", shape=rect, style=filled];
+96 [class=intent, fillcolor=lightblue, label="i need you to answer a question from a given text for me", shape=rect, style=filled];
+97 [class=intent, fillcolor=lightblue, label="i need you to summarize something", shape=rect, style=filled];
+98 [class=intent, fillcolor=lightblue, label="i need to generate text from a prompt", shape=rect, style=filled];
+99 [class=intent, fillcolor=lightblue, label="i need to paraphrase some text", shape=rect, style=filled];
+100 [class=intent, fillcolor=lightblue, label="setup next", shape=rect, style=filled];
+101 [class=intent, fillcolor=lightblue, label="setup next", shape=rect, style=filled];
+102 [class=intent, fillcolor=lightblue, label="setup user now", shape=rect, style=filled];
+103 [class=intent, fillcolor=lightblue, label="setup next now", shape=rect, style=filled];
+104 [class=intent, fillcolor=lightblue, label="setup next now", shape=rect, style=filled];
+105 [class=intent, fillcolor=lightblue, label="setup persona", shape=rect, style=filled];
+106 [class=intent, fillcolor=lightblue, label="setup generate now", shape=rect, style=filled];
+107 [class=intent, fillcolor=lightblue, label="please tell me what the weather is", shape=rect, style=filled];
+108 [class=intent, fillcolor=lightblue, label="what is the forecast?", shape=rect, style=filled];
+109 [class=intent, fillcolor=lightblue, label=bye, shape=rect, style=filled];
+110 [class=intent, fillcolor=lightblue, label="am I talking to a human?", shape=rect, style=filled];
+111 [class=intent, fillcolor=lightblue, label="/nlu_fallback", shape=rect, style=filled];
+0 -> 72  [class="", key=NONE, label=""];
+0 -> 78  [class="", key=0];
+0 -> 79  [class="", key=0];
+0 -> 80  [class="", key=0];
+1 -> 81  [class="", key=0];
+1 -> 82  [class="", key=0];
+1 -> 83  [class="", key=0];
+1 -> 84  [class="", key=0];
+1 -> 85  [class="", key=0];
+2 -> 86  [class="", key=0];
+2 -> 87  [class="", key=0];
+2 -> 88  [class="", key=0];
+2 -> 89  [class="", key=0];
+3 -> 90  [class="", key=0];
+3 -> 91  [class="", key=0];
+4 -> 5  [class="", key=NONE, label=""];
+5 -> "-1"  [class="", key=NONE, label=""];
+8 -> 92  [class="", key=0];
+8 -> 93  [class="", key=0];
+8 -> 94  [class="", key=0];
+9 -> 10  [class="", key=NONE, label=""];
+10 -> "-1"  [class="", key=NONE, label=""];
+14 -> 15  [class="", key=NONE, label=""];
+15 -> "-1"  [class="", key=NONE, label=""];
+19 -> 20  [class="", key=NONE, label=""];
+20 -> "-1"  [class="", key=NONE, label=""];
+23 -> 95  [class="", key=0];
+24 -> 25  [class="", key=NONE, label=""];
+25 -> "-1"  [class="", key=NONE, label=""];
+27 -> 96  [class="", key=0];
+28 -> 29  [class="", key=NONE, label=""];
+29 -> "-1"  [class="", key=NONE, label=""];
+31 -> 97  [class="", key=0];
+32 -> 33  [class="", key=NONE, label=""];
+33 -> "-1"  [class="", key=NONE, label=""];
+35 -> 98  [class="", key=0];
+36 -> 37  [class="", key=NONE, label=""];
+37 -> "-1"  [class="", key=NONE, label=""];
+39 -> 99  [class="", key=0];
+40 -> 41  [class="", key=NONE, label=""];
+41 -> "-1"  [class="", key=NONE, label=""];
+42 -> 43  [class="", key=NONE, label=""];
+42 -> 55  [class="", key=NONE, label=""];
+43 -> 100  [class="", key=0];
+44 -> 101  [class="", key=0];
+45 -> 102  [class="", key=0];
+46 -> 47  [class="", key=NONE, label=""];
+47 -> 103  [class="", key=0];
+48 -> 104  [class="", key=0];
+49 -> 105  [class="", key=0];
+50 -> 51  [class="", key=NONE, label=""];
+51 -> 106  [class="", key=0];
+52 -> 53  [class="", key=NONE, label=""];
+53 -> "-1"  [class="", key=NONE, label=""];
+55 -> "-1"  [class="", key=NONE, label=""];
+56 -> "-1"  [class="", key=NONE, label=""];
+59 -> 107  [class="", key=0];
+59 -> 108  [class="", key=0];
+60 -> 61  [class="", key=NONE, label=""];
+61 -> "-1"  [class="", key=NONE, label=""];
+65 -> 66  [class="", key=NONE, label=""];
+66 -> "-1"  [class="", key=NONE, label=""];
+70 -> 71  [class="", key=NONE, label=""];
+71 -> "-1"  [class="", key=NONE, label=""];
+72 -> 109  [class="", key=0];
+72 -> 110  [class="", key=0];
+72 -> 111  [class="", key=0];
+73 -> "-1"  [class="", key=NONE, label=""];
+75 -> "-1"  [class="", key=NONE, label=""];
+77 -> "-1"  [class="", key=NONE, label=""];
+78 -> 1  [class="", key=0];
+79 -> 42  [class="", key=0];
+80 -> 56  [class="", key=0];
+81 -> 2  [class="", key=0];
+82 -> 27  [class="", key=0];
+83 -> 31  [class="", key=0];
+84 -> 35  [class="", key=0];
+85 -> 39  [class="", key=0];
+86 -> 3  [class="", key=0];
+87 -> 8  [class="", key=0];
+88 -> 23  [class="", key=0];
+89 -> 59  [class="", key=0];
+90 -> 4  [class="", key=0];
+91 -> 70  [class="", key=0];
+92 -> 9  [class="", key=0];
+93 -> 14  [class="", key=0];
+94 -> 19  [class="", key=0];
+95 -> 24  [class="", key=0];
+96 -> 28  [class="", key=0];
+97 -> 32  [class="", key=0];
+98 -> 36  [class="", key=0];
+99 -> 40  [class="", key=0];
+100 -> 44  [class="", key=0];
+101 -> 45  [class="", key=0];
+102 -> 46  [class="", key=0];
+103 -> 48  [class="", key=0];
+104 -> 49  [class="", key=0];
+105 -> 50  [class="", key=0];
+106 -> 52  [class="", key=0];
+107 -> 60  [class="", key=0];
+108 -> 65  [class="", key=0];
+109 -> 73  [class="", key=0];
+110 -> 75  [class="", key=0];
+111 -> 77  [class="", key=0];
+}
+`;
+    drawGraph(graph);
+  } else {
+    serveGraph();
+  }
+
+
+</script>
+</body>
+</html>
